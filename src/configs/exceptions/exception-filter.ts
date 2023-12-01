@@ -23,12 +23,13 @@ export class HttpExceptionFilter implements ExceptionFilter {
         CommonErrorCode.UNAUTHORIZED,
         'You are not authorized to access this resource',
       );
-    } else
+    } else {
+      console.log(exception);
       errorException = new ErrorException(
         CommonErrorCode.INTERNAL_SERVER_ERROR,
         'Server sập',
       );
-
+    }
     response
       .status(errorException.httpStatusCode)
       .json(errorException.returnError());

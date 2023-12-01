@@ -12,6 +12,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { HttpExceptionFilter } from './configs/exceptions/exception-filter';
 import { AuthGuard } from './common/guards/auth.guard';
+import { User } from './modules/user/entities/user.entity';
 
 @Module({
   imports: [
@@ -26,8 +27,7 @@ import { AuthGuard } from './common/guards/auth.guard';
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
-      entities: [],
-      synchronize: true,
+      entities: ['dist/modules/**/*.entity.js'],
     }),
     JwtModule.register({
       global: true,
