@@ -8,3 +8,7 @@ export const DATABASE_PASSWORD = process.env.DATABASE_PASSWORD ?? 'root';
 export const DATABASE_NAME = process.env.DATABASE_NAME ?? 'app_db';
 export const DATABASE_URL =
   process.env.DATABASE_URL ?? 'mysql://root:mariadb@127.0.0.1:3380/app_db';
+
+//jwt
+export const JWT_SECRET = process.env.JWT_SECRET ?? 'secret';
+export const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN ?? '30d';

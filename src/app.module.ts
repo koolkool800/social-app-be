@@ -8,6 +8,10 @@ import { MessageModule } from './modules/message/message.module';
 import { ConversationModule } from './modules/conversation/conversation.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ChatModule } from './modules/chat/chat.module';
+import { JwtModule } from '@nestjs/jwt';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import { HttpExceptionFilter } from './configs/exceptions/exception-filter';
+import { AuthGuard } from './common/guards/auth.guard';
 
 @Module({
   imports: [
@@ -25,6 +29,11 @@ import { ChatModule } from './modules/chat/chat.module';
       entities: [],
       synchronize: true,
     }),
+    JwtModule.register({
+      global: true,
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: process.env.JWT_EXPIRES_IN },
+    }),
     UserModule,
     MessageModule,
     ConversationModule,
@@ -34,10 +43,14 @@ import { ChatModule } from './modules/chat/chat.module';
   controllers: [AppController],
   providers: [
     AppService,
-    // {
-    //   provide: APP_FILTER,
-    //   useClass: HttpExceptionFilter,
-    // },
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
   ],
 })
 export class AppModule {}

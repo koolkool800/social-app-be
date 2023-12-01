@@ -3,21 +3,11 @@ import {
   Catch,
   ArgumentsHost,
   HttpException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ErrorException } from './exception-error';
-
-export enum CommonErrorCode {
-  VALIDATION_ERROR = 'VALIDATION_ERROR|400',
-  INTERNAL_SERVER_ERROR = 'INTERNAL_SERVER_ERROR|500',
-  UNAUTHORIZED = 'UNAUTHORIZED|401',
-  FORBIDDEN = 'FORBIDDEN|403',
-  NOT_FOUND = 'NOT_FOUND|404',
-  PATH_NOT_FOUND = 'PATH_NOT_FOUND|404',
-  FILTER_NULL = 'FILTER_NULL|404',
-  INVALID_INFORMATION = 'INVALID_INFORMATION|400',
-  MISSING_VALUE = 'MISSING_VALUE|400',
-}
+import { CommonErrorCode } from 'src/common/contants/error-code';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -27,10 +17,17 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest<Request>();
     let errorException: ErrorException = null;
 
-    errorException = new ErrorException(
-      CommonErrorCode.INTERNAL_SERVER_ERROR,
-      'Server sập',
-    );
+    if (exception instanceof UnauthorizedException) {
+      console.log('herer');
+      errorException = new ErrorException(
+        CommonErrorCode.UNAUTHORIZED,
+        'You are not authorized to access this resource',
+      );
+    } else
+      errorException = new ErrorException(
+        CommonErrorCode.INTERNAL_SERVER_ERROR,
+        'Server sập',
+      );
 
     response
       .status(errorException.httpStatusCode)
