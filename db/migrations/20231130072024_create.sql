@@ -1,6 +1,6 @@
 -- migrate:up
 create table if not exists users (
-  id integer primary key,
+  id mediumint not null auto_increment primary key,
   name varchar(255) not null,
   email varchar(255) not null,
   password varchar(255) not null,
@@ -9,5 +9,5 @@ create table if not exists users (
 );
 
 -- migrate:down
-drop table users;
+drop table if exists users;
 

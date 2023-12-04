@@ -1,7 +1,7 @@
 -- migrate:up
 
 create table if not exists conversations  (
-  id integer primary key,
+  id mediumint not null auto_increment primary key,
   users json not null,
   last_message_id integer not null,
   created_at timestamp not null default current_timestamp,
@@ -17,7 +17,7 @@ create table if not exists user_conversations (
 );
 
 create table if not exists messages (
-  id integer primary key,
+  id mediumint not null auto_increment primary key,
   author_id integer not null,
   receiver_id integer not null,
   conversation_id integer not null,
@@ -26,6 +26,7 @@ create table if not exists messages (
   created_at timestamp not null default current_timestamp,
   updated_at timestamp not null default current_timestamp
 );
+
 
 
 alter table messages add constraint messages_author_id_fk foreign key (author_id) references users (id);
@@ -49,6 +50,7 @@ alter table user_conversations drop foreign key if exists user_conversations_con
 
 alter table conversations drop foreign key if exists conversations_last_message_id_fk;
 
-
-
+drop table if exists messages;
+drop table if exists user_conversations;
+drop table if exists conversations;
 
