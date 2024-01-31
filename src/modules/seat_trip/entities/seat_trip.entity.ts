@@ -1,21 +1,26 @@
-import { BaseEntity, Column, Entity } from 'typeorm';
+import { TripEntity } from 'src/modules/trip/entities/trip.entity';
+import { BaseEntity, Column, Entity, ManyToOne } from 'typeorm';
 
 @Entity('seat_trip')
 export class SeatTripEntity extends BaseEntity {
   @Column()
-  seat_name: string;
+  seatName: string;
 
   @Column({ default: false })
-  is_discount: boolean;
+  isDiscount: boolean;
 
   @Column({ nullable: true })
-  discount_price: number;
+  discountPrice: number;
 
   @Column()
   price: number;
 
   @Column({ default: true })
-  is_available: boolean;
+  isAvailable: boolean;
 
-  trip_id: number;
+  @ManyToOne(() => TripEntity, (trip) => trip.seatTrips)
+  trip: TripEntity;
+
+  @Column()
+  tripId: number;
 }

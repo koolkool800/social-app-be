@@ -1,10 +1,11 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from 'src/common/entities/base-entity';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
+import { PAYMENT_METHOD } from '../enum/trip.enum';
+import { SeatTripEntity } from 'src/modules/seat_trip/entities/seat_trip.entity';
+import { ReviewTripEntity } from 'src/modules/review_trip/entities/review_trip.entity';
 
-enum PAYMENT_METHOD {}
-
-interface ITripPoint {
+export interface ITripPoint {
   address: string;
   time: string;
 }
@@ -18,7 +19,7 @@ export class TripEntity extends BaseEntity {
   images: string[];
 
   @Column({ enum: PAYMENT_METHOD })
-  payment_methods: PAYMENT_METHOD[];
+  paymentMethods: PAYMENT_METHOD[];
 
   @Column()
   departure: string;
@@ -27,35 +28,45 @@ export class TripEntity extends BaseEntity {
   destination: string;
 
   @Column()
-  start_time: string;
+  startTime: string;
 
   @Column()
-  end_time: string;
+  endTime: string;
 
   @Column()
-  pick_up_points: ITripPoint[];
+  pickUpPoints: ITripPoint[];
 
   @Column()
-  drop_off_points: ITripPoint[];
+  dropOffPoints: ITripPoint[];
 
   @Column()
-  seat_template_option: string;
+  seatTemplateOption: string;
 
   @Column()
-  seat_template_level: number;
+  seatTemplateLevel: number;
 
   @Column()
-  seat_template_rows: number;
+  seatTemplateRows: number;
 
   @Column()
-  seat_template_columns: number;
+  seatTemplateColumns: number;
 
   @Column({ default: false })
-  is_pre_payment: boolean;
+  isPrePayment: boolean;
 
   @Column()
-  min_price: number;
+  minPrice: number;
 
-  @ManyToOne(() => UserEntity)
-  business_id: string;
+  @Column()
+  businessId: number;
+
+  // ----------------- relations
+  @ManyToOne(() => UserEntity, (user) => user.trips)
+  business: UserEntity;
+
+  @OneToMany(() => SeatTripEntity, (seatTrip) => seatTrip.trip)
+  seatTrips: SeatTripEntity[];
+
+  @OneToMany(() => ReviewTripEntity, (reviewTrip) => reviewTrip.trip)
+  reviewTrips: ReviewTripEntity[];
 }
