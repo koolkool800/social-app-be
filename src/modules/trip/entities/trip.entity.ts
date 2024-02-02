@@ -15,10 +15,21 @@ export class TripEntity extends BaseEntity {
   @Column()
   thumbnail: string;
 
-  @Column()
+  @Column('json')
   images: string[];
 
-  @Column({ enum: PAYMENT_METHOD })
+  @Column({
+    type: 'json',
+    transformer: {
+      to(value: PAYMENT_METHOD[]): string {
+        return JSON.stringify(value);
+      },
+      from(value: string): PAYMENT_METHOD[] {
+        return JSON.parse(value);
+      },
+    },
+    nullable: true,
+  })
   paymentMethods: PAYMENT_METHOD[];
 
   @Column()
@@ -33,10 +44,10 @@ export class TripEntity extends BaseEntity {
   @Column()
   endTime: string;
 
-  @Column()
+  @Column('json')
   pickUpPoints: ITripPoint[];
 
-  @Column()
+  @Column('json')
   dropOffPoints: ITripPoint[];
 
   @Column()

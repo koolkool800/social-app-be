@@ -1,17 +1,18 @@
 import { BaseEntity } from 'src/common/entities/base-entity';
-import { Column, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import {
   CUSTOMER_TYPE,
   LEVEL_USER,
   LOGIN_TYPE,
   USER_ROLE,
 } from '../enum/user.enum';
-import { PostEntity } from 'src/modules/post/entities/post.entity';
+// import { PostEntity } from 'src/modules/post/entities/post.entity';
 import { TripEntity } from 'src/modules/trip/entities/trip.entity';
 import { ReviewTripEntity } from 'src/modules/review_trip/entities/review_trip.entity';
 import { ReplyReviewTripEntity } from 'src/modules/reply_review_trip/entities/reply-review-trip.entity';
 import { OrderEntity } from 'src/modules/order/entities/order.entity';
 
+@Entity('users')
 export class UserEntity extends BaseEntity {
   @Column()
   name: string;
@@ -45,8 +46,8 @@ export class UserEntity extends BaseEntity {
 
   // ----------------- relations
 
-  @OneToMany(() => PostEntity, (post) => post.author)
-  posts: PostEntity[];
+  // @OneToMany(() => PostEntity, (post) => post.author)
+  // posts: PostEntity[];
 
   @OneToMany(() => TripEntity, (trip) => trip.business)
   trips: TripEntity[];

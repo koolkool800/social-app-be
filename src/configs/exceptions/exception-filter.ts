@@ -3,6 +3,9 @@ import {
   Catch,
   ArgumentsHost,
   HttpException,
+  UnauthorizedException,
+  ForbiddenException,
+  NotFoundException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ErrorException } from './exception-error';
@@ -24,13 +27,31 @@ export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
-    const request = ctx.getRequest<Request>();
     let errorException: ErrorException = null;
 
-    errorException = new ErrorException(
-      CommonErrorCode.INTERNAL_SERVER_ERROR,
-      'Server sập',
-    );
+    if (exception instanceof UnauthorizedException) {
+      errorException = new ErrorException(
+        CommonErrorCode.UNAUTHORIZED,
+        'Unauthorized',
+      );
+    } else if (exception instanceof ForbiddenException) {
+      errorException = new ErrorException(
+        CommonErrorCode.FORBIDDEN,
+        'Forbidden resource',
+      );
+    } else if (exception instanceof ErrorException) {
+      errorException = exception;
+    } else if (exception instanceof NotFoundException) {
+      errorException = new ErrorException(
+        CommonErrorCode.PATH_NOT_FOUND,
+        'Path not found',
+      );
+    } else {
+      errorException = new ErrorException(
+        CommonErrorCode.INTERNAL_SERVER_ERROR,
+        'Server sập',
+      );
+    }
 
     response
       .status(errorException.httpStatusCode)
