@@ -13,3 +13,8 @@ export enum LOGIN_TYPE {
   NORMAL = 'NORMAL',
   GOOGLE = 'GOOGLE',
 }
+
+export enum USER_ROLE {
+  ADMIN = 'ADMIN',
+  USER = 'USER',
+}

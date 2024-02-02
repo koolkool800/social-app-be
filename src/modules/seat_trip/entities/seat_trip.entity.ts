@@ -1,5 +1,6 @@
+import { OrderSeatTripEntity } from 'src/modules/order/entities/order-seat-trip.entity';
 import { TripEntity } from 'src/modules/trip/entities/trip.entity';
-import { BaseEntity, Column, Entity, ManyToOne } from 'typeorm';
+import { BaseEntity, Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity('seat_trip')
 export class SeatTripEntity extends BaseEntity {
@@ -20,6 +21,12 @@ export class SeatTripEntity extends BaseEntity {
 
   @ManyToOne(() => TripEntity, (trip) => trip.seatTrips)
   trip: TripEntity;
+
+  @OneToMany(
+    () => OrderSeatTripEntity,
+    (orderSeatTrip) => orderSeatTrip.seatTrip,
+  )
+  orderSeatTrips: OrderSeatTripEntity[];
 
   @Column()
   tripId: number;

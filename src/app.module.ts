@@ -6,13 +6,13 @@ import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './modules/user/user.module';
 import { MessageModule } from './modules/message/message.module';
 import { ConversationModule } from './modules/conversation/conversation.module';
-import { AuthModule } from './modules/auth/auth.module';
 import { ChatModule } from './modules/chat/chat.module';
 import { TripModule } from './modules/trip/trip.module';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './common/constants/jwt';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './common/guards/auth.guard';
+import { RolesGuard } from './common/guards/roles.guard';
 
 @Module({
   imports: [
@@ -38,7 +38,6 @@ import { AuthGuard } from './common/guards/auth.guard';
     UserModule,
     MessageModule,
     ConversationModule,
-    AuthModule,
     ChatModule,
     TripModule,
   ],
@@ -53,6 +52,10 @@ import { AuthGuard } from './common/guards/auth.guard';
     //   provide: APP_GUARD,
     //   useClass: AuthGuard,
     // },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
   ],
 })
 export class AppModule {}
