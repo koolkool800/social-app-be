@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ErrorException } from './exception-error';
+import { QueryFailedError } from 'typeorm';
 
 export enum CommonErrorCode {
   VALIDATION_ERROR = 'VALIDATION_ERROR|400',
@@ -45,6 +46,12 @@ export class HttpExceptionFilter implements ExceptionFilter {
       errorException = new ErrorException(
         CommonErrorCode.PATH_NOT_FOUND,
         'Path not found',
+      );
+    } else if (exception instanceof QueryFailedError) {
+      console.log('catch exception herer');
+      errorException = new ErrorException(
+        CommonErrorCode.INTERNAL_SERVER_ERROR,
+        'Database error',
       );
     } else {
       errorException = new ErrorException(

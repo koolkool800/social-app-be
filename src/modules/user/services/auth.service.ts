@@ -35,6 +35,8 @@ export class AuthService {
 
     const userEntity = await this.userUseCase.createUser(body);
 
+    console.log(userEntity);
+
     return userEntity ? true : false;
   }
 

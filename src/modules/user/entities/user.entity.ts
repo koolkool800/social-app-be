@@ -6,7 +6,7 @@ import {
   LOGIN_TYPE,
   USER_ROLE,
 } from '../enum/user.enum';
-// import { PostEntity } from 'src/modules/post/entities/post.entity';
+import { PostEntity } from 'src/modules/post/entities/post.entity';
 import { TripEntity } from 'src/modules/trip/entities/trip.entity';
 import { ReviewTripEntity } from 'src/modules/review_trip/entities/review_trip.entity';
 import { ReplyReviewTripEntity } from 'src/modules/reply_review_trip/entities/reply-review-trip.entity';
@@ -17,7 +17,18 @@ export class UserEntity extends BaseEntity {
   @Column()
   name: string;
 
-  @Column({ enum: LEVEL_USER, default: LEVEL_USER.LEVEL1 })
+  @Column('json', {
+    transformer: {
+      to(value: LEVEL_USER): string {
+        return JSON.stringify(value);
+      },
+      from(value: string): LEVEL_USER {
+        return JSON.parse(value);
+      },
+    },
+    default: LEVEL_USER.LEVEL1,
+    nullable: true,
+  })
   level: LEVEL_USER;
 
   @Column()
@@ -29,25 +40,58 @@ export class UserEntity extends BaseEntity {
   @Column()
   phoneNumber: string;
 
-  @Column({ enum: CUSTOMER_TYPE, default: CUSTOMER_TYPE.PERSONAL })
+  @Column('json', {
+    transformer: {
+      to(value: CUSTOMER_TYPE): string {
+        return JSON.stringify(value);
+      },
+      from(value: string): CUSTOMER_TYPE {
+        return JSON.parse(value);
+      },
+    },
+    default: CUSTOMER_TYPE.PERSONAL,
+    nullable: true,
+  })
   customerType: CUSTOMER_TYPE;
 
   @Column({ default: 0 })
   moneyWallet: number;
 
-  @Column({ enum: LOGIN_TYPE, default: LOGIN_TYPE.NORMAL })
+  @Column('json', {
+    transformer: {
+      to(value: LOGIN_TYPE): string {
+        return JSON.stringify(value);
+      },
+      from(value: string): LOGIN_TYPE {
+        return JSON.parse(value);
+      },
+    },
+    default: LOGIN_TYPE.NORMAL,
+    nullable: true,
+  })
   loginType: LOGIN_TYPE;
 
   @Column({ nullable: true })
   googleId: string;
 
-  @Column({ enum: USER_ROLE, default: USER_ROLE.USER })
+  @Column('json', {
+    transformer: {
+      to(value: USER_ROLE): string {
+        return JSON.stringify(value);
+      },
+      from(value: string): USER_ROLE {
+        return JSON.parse(value);
+      },
+    },
+    default: USER_ROLE.USER,
+    nullable: true,
+  })
   role: USER_ROLE;
 
   // ----------------- relations
 
-  // @OneToMany(() => PostEntity, (post) => post.author)
-  // posts: PostEntity[];
+  @OneToMany(() => PostEntity, (post) => post.author)
+  posts: PostEntity[];
 
   @OneToMany(() => TripEntity, (trip) => trip.business)
   trips: TripEntity[];

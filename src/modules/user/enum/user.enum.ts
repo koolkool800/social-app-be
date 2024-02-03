@@ -1,7 +1,7 @@
 export enum LEVEL_USER {
-  LEVEL1 = 1,
-  LEVEL2 = 2,
-  LEVEL3 = 3,
+  LEVEL1 = '1',
+  LEVEL2 = '2',
+  LEVEL3 = '3',
 }
 
 export enum CUSTOMER_TYPE {
