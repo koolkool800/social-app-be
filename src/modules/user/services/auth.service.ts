@@ -53,9 +53,12 @@ export class AuthService {
   async signIn(
     body: SignInDto,
   ): Promise<{ accessToken: string; user: UserEntity }> {
+    console.log(body.email);
     const user = await this.userUseCase.findUserExist({
       where: { email: body.email },
     });
+
+    console.log(user);
     if (!user) {
       throw new ErrorException(AuthErrorConstants.NOT_FOUND, 'User not found');
     }

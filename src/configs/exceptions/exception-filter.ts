@@ -6,6 +6,7 @@ import {
   UnauthorizedException,
   ForbiddenException,
   NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ErrorException } from './exception-error';
@@ -51,6 +52,12 @@ export class HttpExceptionFilter implements ExceptionFilter {
       errorException = new ErrorException(
         CommonErrorCode.INTERNAL_SERVER_ERROR,
         'Database query error',
+      );
+    } else if (exception instanceof BadRequestException) {
+      errorException = new ErrorException(
+        CommonErrorCode.VALIDATION_ERROR,
+        exception.message,
+        (exception.getResponse() as any)?.message?.[0]?.constraints,
       );
     } else {
       errorException = new ErrorException(
