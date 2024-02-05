@@ -48,10 +48,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
         'Path not found',
       );
     } else if (exception instanceof QueryFailedError) {
-      console.log('catch exception herer');
       errorException = new ErrorException(
         CommonErrorCode.INTERNAL_SERVER_ERROR,
-        'Database error',
+        'Database query error',
       );
     } else {
       errorException = new ErrorException(

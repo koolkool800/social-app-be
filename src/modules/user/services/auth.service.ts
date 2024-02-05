@@ -21,7 +21,9 @@ export class AuthService {
     private authUseCase: AuthUseCase,
   ) {}
 
-  async signUp(body: SignUpDto): Promise<boolean> {
+  async signUp(
+    body: SignUpDto,
+  ): Promise<{ accessToken: string; user: UserEntity }> {
     const isExist = await this.userUseCase.findUserExist({
       where: { email: body.email },
     });
@@ -33,16 +35,24 @@ export class AuthService {
       );
     }
 
-    const userEntity = await this.userUseCase.createUser(body);
+    const user = await this.userUseCase.createUser(body);
 
-    console.log(userEntity);
+    const payload: IPayloadJWT = {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    };
 
-    return userEntity ? true : false;
+    const token = this.authUseCase.genenerateAccessToken(payload);
+
+    delete user.password;
+
+    return { accessToken: token, user };
   }
 
   async signIn(
     body: SignInDto,
-  ): Promise<{ accessToken: string; email: string }> {
+  ): Promise<{ accessToken: string; user: UserEntity }> {
     const user = await this.userUseCase.findUserExist({
       where: { email: body.email },
     });
@@ -70,6 +80,8 @@ export class AuthService {
 
     const token = this.authUseCase.genenerateAccessToken(payload);
 
-    return { accessToken: token, email: user.email };
+    delete user.password;
+
+    return { accessToken: token, user };
   }
 }

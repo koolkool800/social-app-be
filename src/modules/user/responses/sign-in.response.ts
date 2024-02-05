@@ -1,19 +1,19 @@
 import { BaseResponse } from 'src/common/responses/base.response';
+import { UserEntity } from '../entities/user.entity';
 
 export class SignInResponse extends BaseResponse {
   accessToken: string;
-  email: string;
-
-  constructor(data: { accessToken: string; email: string }) {
+  user: UserEntity;
+  constructor(data: { accessToken: string; user: UserEntity }) {
     super();
     this.accessToken = data.accessToken;
-    this.email = data.email;
+    this.user = data.user;
   }
 
   public toJSON() {
     return {
       accessToken: this.accessToken,
-      email: this.email,
+      user: this.user,
     };
   }
 }
