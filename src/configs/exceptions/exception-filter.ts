@@ -56,7 +56,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     } else if (exception instanceof BadRequestException) {
       errorException = new ErrorException(
         CommonErrorCode.VALIDATION_ERROR,
-        exception.message,
+        'Validation error',
         (exception.getResponse() as any)?.message?.[0]?.constraints,
       );
     } else {
