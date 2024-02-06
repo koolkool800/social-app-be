@@ -17,6 +17,9 @@ export class UserEntity extends BaseEntity {
   @Column()
   name: string;
 
+  @Column({nullable : true})
+  businessName : string
+
   @Column('json', {
     transformer: {
       to(value: LEVEL_USER): string {
