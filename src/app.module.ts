@@ -16,6 +16,7 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptors';
 import { PostModule } from './modules/post/post.module';
 import { OrderModule } from './modules/order/order.module';
 import database from './configs/database';
+import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import database from './configs/database';
     TripModule,
     OrderModule,
     PostModule,
+    CloudinaryModule,
   ],
   controllers: [AppController],
   providers: [
